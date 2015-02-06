@@ -12,7 +12,7 @@
 int main(int argc, char *argv[])
 {
     int sockfd = 0, n = 0;
-    char recvBuff[1024];
+    char recvBuff[256];
     char inputBuff[256];
     struct sockaddr_in serv_addr;
 
@@ -49,18 +49,17 @@ int main(int argc, char *argv[])
     char c;
     while (1) {
 
-        // prints out info from server
-        if ((n = read(sockfd, recvBuff, sizeof(recvBuff)-1)) > 0) {
-            recvBuff[n] = 0;
-            if(fputs(recvBuff, stdout) == EOF)
-            {
-                printf("\n Error : Fputs error\n");
-            }
+        // get board
+        if ((n = read(sockfd, recvBuff, 256)) > 0) {
+            printf("%s", recvBuff);
         }
 
-        // send instruction
-        // automatically sends on \n char
+
+        // read in commands
+        printf("\n> ");
         fgets(inputBuff, 256, stdin);
+
+        // send commands to server
         write(sockfd, inputBuff, 256);
     }
 
